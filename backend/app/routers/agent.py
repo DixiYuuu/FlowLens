@@ -17,11 +17,15 @@ async def stream_agent_chat(payload: AgentChatRequest):
             async for event in agent_service.stream_chat(payload.mode, payload.prompt, payload.direction):
                 yield f"event: {event.get('type', 'message')}\n"
                 yield f"data: {json.dumps(event, ensure_ascii=False)}\n\n"
-        except Exception as exc:
-            error_event = {"type": "error", "message": f"流式服务异常: {str(exc)}"}
+        except Exception:
+            error_event = {"type": "error", "message": "流式服务暂时不可用，请稍后重试。"}
             yield "event: error\n"
             yield f"data: {json.dumps(error_event, ensure_ascii=False)}\n\n"
             yield "event: done\n"
             yield f"data: {json.dumps({'type': 'done'}, ensure_ascii=False)}\n\n"
 
-    return StreamingResponse(event_generator(), media_type="text/event-stream")
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+    )

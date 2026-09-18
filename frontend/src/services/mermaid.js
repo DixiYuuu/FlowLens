@@ -7,18 +7,20 @@ export function initMermaid() {
   mermaid.initialize({
     startOnLoad: false,
     theme: "base",
-    securityLevel: "loose",
+    securityLevel: "strict",
     flowchart: {
       curve: "basis",
       htmlLabels: true,
       useMaxWidth: false,
     },
     themeVariables: {
-      primaryColor: "#dbeafe",
-      primaryBorderColor: "#2563eb",
-      lineColor: "#1f2937",
-      fontFamily: "IBM Plex Sans",
-      textColor: "#0f172a",
+      primaryColor: "#e7f0ff",
+      primaryBorderColor: "#5d7fa8",
+      secondaryColor: "#edf4f3",
+      tertiaryColor: "#f7f9fc",
+      lineColor: "#7b8da3",
+      fontFamily: "Inter, PingFang SC, Microsoft YaHei, sans-serif",
+      textColor: "#172033",
     },
   });
   initialized = true;

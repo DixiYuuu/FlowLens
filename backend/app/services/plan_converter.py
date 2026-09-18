@@ -24,7 +24,8 @@ class PlanConverter:
 
         for idx, label in enumerate(lines):
             node_id = f"N{idx + 1}"
-            safe_label = label.replace('"', "'")
+            safe_label = label.replace("\\", "\\\\").replace('"', "'")
+            safe_label = safe_label.replace("[", "(").replace("]", ")")
             nodes.append(f"    {node_id}[\"{safe_label}\"]")
             if idx > 0:
                 prev_id = f"N{idx}"

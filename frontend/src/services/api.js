@@ -45,11 +45,12 @@ function parseSSEChunk(buffer, onEvent) {
   return remaining;
 }
 
-export async function streamAgentChat(payload, onEvent) {
+export async function streamAgentChat(payload, onEvent, signal) {
   const resp = await fetch(`${API_BASE}/api/agent/chat/stream`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
+    signal,
   });
 
   if (!resp.ok || !resp.body) {
@@ -65,5 +66,10 @@ export async function streamAgentChat(payload, onEvent) {
     if (done) break;
     buffer += decoder.decode(value, { stream: true });
     buffer = parseSSEChunk(buffer, onEvent);
+  }
+
+  buffer += decoder.decode();
+  if (buffer.trim()) {
+    parseSSEChunk(`${buffer}\n\n`, onEvent);
   }
 }
